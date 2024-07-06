@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Class Definition for ApiObjects
+ * 
  * @author scarr
  */
 public class ApiClass extends ApiObject {

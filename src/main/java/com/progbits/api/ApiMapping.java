@@ -11,21 +11,21 @@ import java.util.Map;
  * @author scarr
  */
 public interface ApiMapping {
-    public String getTargetClass();
-    public void setTargetClass(String _targetClass);
+    String getTargetClass();
+    void setTargetClass(String _targetClass);
     
-    public String getSourceClass();
-    public void setSourceClass(String _sourceClass);
+    String getSourceClass();
+    void setSourceClass(String _sourceClass);
     
-    public boolean setScript(String script) throws ApiException;
+    boolean setScript(String script) throws ApiException;
     
-    public ApiClasses getInModels();
-    public void setInModels(ApiClasses inModels);
+    ApiClasses getInModels();
+    void setInModels(ApiClasses inModels);
     
-    public ApiClasses getOutModels();
-    public void setOutModels(ApiClasses outModels);
+    ApiClasses getOutModels();
+    void setOutModels(ApiClasses outModels);
     
-    public ApiMapping getClone();
+    ApiMapping getClone();
     
-    public ApiObject map(ApiObject in, Map<String, Object> args) throws ApiException, ApiClassNotFoundException;
+    ApiObject map(ApiObject in, Map<String, Object> args) throws ApiException, ApiClassNotFoundException;
 }

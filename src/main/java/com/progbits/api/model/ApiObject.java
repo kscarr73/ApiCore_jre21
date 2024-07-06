@@ -335,7 +335,7 @@ public class ApiObject implements Bindings {
      *
      * If the list doesn't already exist, it is created.
      *
-     * @param key The List to Add the Object to
+     * @param key The Key to add a new ApiObject to. See {@link getCoreObject()}
      *
      * @return The newly created Object from the List
      */
@@ -351,6 +351,15 @@ public class ApiObject implements Bindings {
         return lst.get(lst.size() - 1);
     }
 
+    /**
+     * Search a List for a specific field that matches the entry
+     * 
+     * @param key The Key to Return. See {@link getCoreObject()}
+     * @param match Field to search
+     * @param entry Entry to find in object
+     * 
+     * @return The ApiObject found, Null if the list is empty, or the key doesn't exist
+     */
     public ApiObject getListSearch(String key, String match, String entry) {
         ArrayList<ApiObject> lst = (ArrayList<ApiObject>) getCoreObject(key);
 
@@ -365,6 +374,12 @@ public class ApiObject implements Bindings {
         return null;
     }
 
+    /**
+     * Return the Last Item of a Specified Object List
+     * @param key The Key to Return. See {@link getCoreObject()}
+     * 
+     * @return The Object found, or Null if the list is empty, or the key doesn't exist
+     */
     public ApiObject getListLast(String key) {
         ArrayList<ApiObject> lst = (ArrayList<ApiObject>) getCoreObject(key);
 
@@ -415,6 +430,14 @@ public class ApiObject implements Bindings {
     /**
      * Returns the Underlying Object from the Map
      *
+     * key can be a simple field name, or it can contain sub object and list elements.
+     * 
+     * <p>Example: myField - Return the Object for this field
+     * 
+     * <p>Example: myList[0] - Return the first ApiObject in the list named myList
+     * 
+     * <p>Example: myList[name=Scott].id - Return the id of the Object with the name of Scott
+     * 
      * @param key field Name to return
      * @return Object stored for the field name.
      */
@@ -886,138 +909,7 @@ public class ApiObject implements Bindings {
     @Override
     public Object put(String name, Object value) {
         if (_class != null) {
-            String type = _class.getString(
-                    "fields[name=" + name + "].type", "");
-
-            switch (type) {
-                case "String":
-                    if (value instanceof String) {
-                        return _fields.put(name, value);
-                    }
-                    if (value == null) {
-                        return _fields.put(name, null);
-                    } else {
-                        return _fields.put(name, String.valueOf(value));
-                    }
-
-                case "Integer":
-                    if (value instanceof Integer) {
-                        return _fields.put(name, value);
-                    } else if (value instanceof Long) {
-                        return _fields.put(name, ((Long) value).intValue());
-                    } else if (value instanceof Double) {
-                        return _fields.put(name, ((Double) value).intValue());
-                    } else if (value instanceof String) {
-                        if (((String) value).trim().isEmpty()) {
-                            return _fields.put(name, null);
-                        } else {
-                            return _fields.put(name, Integer.parseInt((String) value));
-                        }
-                    } else if (value instanceof BigDecimal) {
-                        return _fields.put(name, ((BigDecimal) value).intValue());
-                    } else {
-                        return _fields.put(name, value);
-                    }
-
-                case "Long":
-                    if (value instanceof Long) {
-                        return _fields.put(name, value);
-                    } else if (value instanceof Integer) {
-                        return _fields.put(name, ((Integer) value).longValue());
-                    } else if (value instanceof Double) {
-                        return _fields.put(name, ((Double) value).longValue());
-                    } else if (value instanceof String) {
-                        if (((String) value).trim().isEmpty()) {
-                            return _fields.put(name, null);
-                        } else {
-                            return _fields.put(name, Long.parseLong((String) value));
-                        }
-                    } else if (value instanceof BigDecimal) {
-                        return _fields.put(name, ((BigDecimal) value).longValue());
-                    } else {
-                        return _fields.put(name, value);
-                    }
-                case "ArrayList":
-                    return _fields.put(name, value);
-                case "Object":
-                    return _fields.put(name, value);
-                case "DateTime":
-                    if (value instanceof String) {
-                        if (((String) value).isEmpty()) {
-                            return _fields.put(name, null);
-                        } else {
-                            return _fields.put(name, OffsetDateTime.parse((String) value));
-                        }
-
-                    } else {
-                        return _fields.put(name, value);
-                    }
-                case "Double":
-                    if (value instanceof Double) {
-                        return _fields.put(name, value);
-                    } else if (value instanceof Integer) {
-                        return _fields.put(name, ((Integer) value).doubleValue());
-                    } else if (value instanceof Long) {
-                        return _fields.put(name, ((Long) value).doubleValue());
-                    } else if (value instanceof String) {
-                        if (((String) value).trim().isEmpty()) {
-                            return _fields.put(name, null);
-                        } else {
-                            return _fields.put(name, Double.parseDouble((String) value));
-                        }
-                    } else if (value instanceof BigDecimal) {
-                        return _fields.put(name, ((BigDecimal) value).doubleValue());
-                    } else {
-                        return _fields.put(name, value);
-                    }
-
-                case "Decimal":
-                    if (value instanceof BigDecimal) {
-                        return _fields.put(name, value);
-                    } else if (value instanceof Integer) {
-                        return _fields.put(name, BigDecimal.valueOf((Integer) value).longValue());
-                    } else if (value instanceof Double) {
-                        return _fields.put(name, BigDecimal.valueOf((Double) value));
-                    } else if (value instanceof String) {
-                        if (((String) value).trim().isEmpty()) {
-                            return _fields.put(name, null);
-                        } else {
-                            return _fields.put(name, new BigDecimal((String) value));
-                        }
-                    } else if (value instanceof Long) {
-                        return _fields.put(name, BigDecimal.valueOf((Long) value));
-                    } else {
-                        return _fields.put(name, value);
-                    }
-
-                case "StringArray":
-                    return _fields.put(name, value);
-
-                case "IntegerArray":
-                    return _fields.put(name, value);
-
-                case "Boolean":
-                    if (value instanceof Boolean) {
-                        return _fields.put(name, value);
-                    } else if (value instanceof String) {
-                        if (((String) value).trim().isEmpty()) {
-                            return _fields.put(name, null);
-                        } else {
-                            return _fields.put(name, Boolean.parseBoolean((String) value));
-                        }
-                    } else if (value instanceof Integer) {
-                        if ((Integer) value != 0) {
-                            return _fields.put(name, Boolean.TRUE);
-                        } else {
-                            return _fields.put(name, Boolean.FALSE);
-                        }
-                    } else {
-                        return _fields.put(name, value);
-                    }
-
-                default:
-                    return _fields.put(name, value);
-            }
+            return ApiClassHandler.classPut(_class, _fields, name, value);
         } else {
             return _fields.put(name, value);
         }
