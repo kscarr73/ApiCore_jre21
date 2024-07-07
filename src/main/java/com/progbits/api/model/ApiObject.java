@@ -335,7 +335,7 @@ public class ApiObject implements Bindings {
      *
      * If the list doesn't already exist, it is created.
      *
-     * @param key The Key to add a new ApiObject to. See {@link getCoreObject()}
+     * @param key The Key to add a new ApiObject to. See {@link #getCoreObject}
      *
      * @return The newly created Object from the List
      */
@@ -354,7 +354,7 @@ public class ApiObject implements Bindings {
     /**
      * Search a List for a specific field that matches the entry
      * 
-     * @param key The Key to Return. See {@link getCoreObject()}
+     * @param key The Key to Return. See {@link #getCoreObject}
      * @param match Field to search
      * @param entry Entry to find in object
      * 
@@ -376,7 +376,7 @@ public class ApiObject implements Bindings {
 
     /**
      * Return the Last Item of a Specified Object List
-     * @param key The Key to Return. See {@link getCoreObject()}
+     * @param key The Key to Return. See {@link #getCoreObject}
      * 
      * @return The Object found, or Null if the list is empty, or the key doesn't exist
      */
